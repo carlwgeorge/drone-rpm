@@ -1,0 +1,5 @@
+drone-*.tar.gz
+drone-ui-*.tar.gz
+net-*.tar.gz
+epel-*-*/
+fedora-*-*/

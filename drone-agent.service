@@ -1,0 +1,18 @@
+[Unit]
+Description=Drone agent
+Documentation=http://docs.drone.io
+BindsTo=docker.service
+
+[Service]
+EnvironmentFile=/etc/drone/agent.conf
+ExecStart=/usr/bin/drone-agent --platform linux/amd64
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ReadWritePaths=/var/run/docker.sock
+
+[Install]
+WantedBy=multi-user.target

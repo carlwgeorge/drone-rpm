@@ -1,0 +1,18 @@
+[Unit]
+Description=Drone server
+Documentation=http://docs.drone.io
+BindsTo=docker.service
+
+[Service]
+EnvironmentFile=/etc/drone/server.conf
+ExecStart=/usr/bin/drone-server
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ReadWritePaths=/var/lib/drone
+
+[Install]
+WantedBy=multi-user.target
