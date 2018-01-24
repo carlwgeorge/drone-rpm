@@ -22,7 +22,7 @@
 %global commit_net 1c05540f6879653db88113bc4a2b70aec4bd491f
 
 Name: drone
-Version: 0.8.2
+Version: 0.8.4
 Release: 1%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
@@ -320,5 +320,8 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Wed Jan 24 2018 Carl George <carl@george.computer> - 0.8.4-1
+- Latest upstream
+
 * Mon Nov 20 2017 Carl George <carl@george.computer> - 0.8.2-1
 - Initial package
