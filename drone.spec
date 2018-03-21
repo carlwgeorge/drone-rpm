@@ -23,7 +23,7 @@
 
 Name: drone
 Version: 0.8.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
 URL: https://drone.io
@@ -228,12 +228,6 @@ install -D -m 0644 %{S:26} %{buildroot}%{_unitdir}/drone-server.service.d/coding
 
 install -D -m 0640 %{S:30} %{buildroot}%{_sysconfdir}/drone/server.conf
 install -D -m 0640 %{S:31} %{buildroot}%{_sysconfdir}/drone/agent.conf
-%if %{defined rhel}
-sed -e '/#DOCKER_API_VERSION=1.24/ s/^#//' -i %{buildroot}%{_sysconfdir}/drone/agent.conf
-%endif
-%if %{defined fedora}
-sed -e '/#DOCKER_API_VERSION=1.26/ s/^#//' -i %{buildroot}%{_sysconfdir}/drone/agent.conf
-%endif
 
 install -D -m 0640 %{S:40} %{buildroot}%{_sysconfdir}/drone/github.conf
 install -D -m 0640 %{S:41} %{buildroot}%{_sysconfdir}/drone/gitlab.conf
@@ -320,6 +314,9 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Wed Mar 21 2018 Carl George <carl@george.computer> - 0.8.4-2
+- Both Fedora and RHEL are now using API version 1.26
+
 * Wed Jan 24 2018 Carl George <carl@george.computer> - 0.8.4-1
 - Latest upstream
 
