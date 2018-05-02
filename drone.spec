@@ -10,25 +10,35 @@
 %define gobuild(o:) go build -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
 %endif
 
-# drone
-%global import_path github.com/drone/drone
-
-# drone-ui
-%global import_path_ui github.com/drone/drone-ui
-%global commit_ui cc079b1279f70e54f64cf0c14e1e531b6689232b
-
-# net
-%global import_path_net golang.org/x/net
-%global commit_net 1c05540f6879653db88113bc4a2b70aec4bd491f
-
 Name: drone
-Version: 0.8.4
-Release: 2%{?dist}
+Version: 0.8.5
+Release: 1%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
 URL: https://drone.io
+ExclusiveArch: x86_64 %{arm} aarch64
+BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
+BuildRequires: golang(github.com/golang/protobuf/proto)
+BuildRequires: systemd
+%{?systemd_requires}
+
+# drone
+%global import_path github.com/drone/drone
 Source0: https://%{import_path}/archive/v%{version}/drone-%{version}.tar.gz
+
+# drone-ui
+%global import_path_ui github.com/drone/drone-ui
+%global commit_ui e7597b5234814a2c2f2a7f489b631a76649c335a
 Source1: https://%{import_path_ui}/archive/%{commit_ui}/drone-ui-%{commit_ui}.tar.gz
+
+%if %{undefined rhel}
+BuildRequires: golang(golang.org/x/net/context)
+BuildRequires: golang(golang.org/x/net/context/ctxhttp)
+%endif
+# Fedora has golang.org/x/net packaged, but RHEL does not.  Bundle it here
+# until RHEL gets it.  Always include Source2 so it's in the SRPM.
+%global import_path_net golang.org/x/net
+%global commit_net 66aacef3dd8a676686c7ae3716979581e8b03c47
 Source2: https://github.com/golang/net/archive/%{commit_net}/net-%{commit_net}.tar.gz
 
 Source10: drone-server.service
@@ -53,17 +63,6 @@ Source44: bitbucket.conf
 Source45: stash.conf
 Source46: coding.conf
 
-ExclusiveArch: x86_64 %{arm} aarch64
-BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-# https://github.com/drone/drone/blob/master/BUILDING
-%if %{undefined rhel}
-BuildRequires: golang(golang.org/x/net/context)
-BuildRequires: golang(golang.org/x/net/context/ctxhttp)
-%endif
-BuildRequires: golang(github.com/golang/protobuf/proto)
-BuildRequires: golang(github.com/golang/protobuf/protoc-gen-go)
-BuildRequires: systemd
-%{?systemd_requires}
 
 
 %description
@@ -314,6 +313,9 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Wed May 02 2018 Carl George <carl@george.computer> - 0.8.5-1
+- Latest upstream
+
 * Wed Mar 21 2018 Carl George <carl@george.computer> - 0.8.4-2
 - Both Fedora and RHEL are now using API version 1.26
 
