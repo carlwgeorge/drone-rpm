@@ -1,7 +1,9 @@
 [Unit]
 Description=Drone agent
 Documentation=http://docs.drone.io
-BindsTo=docker.service
+After=docker.service drone-server.service
+Requires=docker.service
+Wants=drone-server.service
 
 [Service]
 EnvironmentFile=/etc/drone/agent.conf

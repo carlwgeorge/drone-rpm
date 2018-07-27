@@ -1,7 +1,7 @@
 [Unit]
 Description=Drone server
 Documentation=http://docs.drone.io
-BindsTo=docker.service
+After=network.target
 
 [Service]
 EnvironmentFile=/etc/drone/server.conf

@@ -6,12 +6,12 @@
 %global debug_package %{nil}
 %endif
 
-%if ! 0%{?gobuild:1}
+%if %{undefined gobuild}
 %define gobuild(o:) go build -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
 %endif
 
 Name: drone
-Version: 0.8.5
+Version: 0.8.6
 Release: 1%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
@@ -62,7 +62,6 @@ Source43: gogs.conf
 Source44: bitbucket.conf
 Source45: stash.conf
 Source46: coding.conf
-
 
 
 %description
@@ -313,6 +312,10 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Fri Jul 27 2018 Carl George <carl@george.computer> - 0.8.6-1
+- Latest upstream
+- Correct dependencies and ordering of service unit files
+
 * Wed May 02 2018 Carl George <carl@george.computer> - 0.8.5-1
 - Latest upstream
 
