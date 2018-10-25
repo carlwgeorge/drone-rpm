@@ -11,7 +11,7 @@
 %endif
 
 Name: drone
-Version: 0.8.6
+Version: 0.8.7
 Release: 1%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
@@ -38,7 +38,7 @@ BuildRequires: golang(golang.org/x/net/context/ctxhttp)
 # Fedora has golang.org/x/net packaged, but RHEL does not.  Bundle it here
 # until RHEL gets it.  Always include Source2 so it's in the SRPM.
 %global import_path_net golang.org/x/net
-%global commit_net 66aacef3dd8a676686c7ae3716979581e8b03c47
+%global commit_net db08ff08e8622530d9ed3a0e8ac279f6d4c02196
 Source2: https://github.com/golang/net/archive/%{commit_net}/net-%{commit_net}.tar.gz
 
 Source10: drone-server.service
@@ -312,6 +312,10 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Thu Oct 25 2018 Carl George <carl@george.computer> - 0.8.7-1
+- Latest upstream
+- Bump bundled golang.org/x/net to commit Fedora ships
+
 * Fri Jul 27 2018 Carl George <carl@george.computer> - 0.8.6-1
 - Latest upstream
 - Correct dependencies and ordering of service unit files
