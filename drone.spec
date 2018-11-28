@@ -11,7 +11,7 @@
 %endif
 
 Name: drone
-Version: 0.8.7
+Version: 0.8.9
 Release: 1%{?dist}
 Summary: A continuous delivery system built on container technology
 License: ASL 2.0
@@ -312,6 +312,9 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Wed Nov 28 2018 Carl George <carl@george.computer> - 0.8.9-1
+- Latest upstream
+
 * Thu Oct 25 2018 Carl George <carl@george.computer> - 0.8.7-1
 - Latest upstream
 - Bump bundled golang.org/x/net to commit Fedora ships
