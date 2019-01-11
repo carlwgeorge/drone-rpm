@@ -1,0 +1,21 @@
+From e3c4bd341f8a8ed22b4101f91929bd019bce5c22 Mon Sep 17 00:00:00 2001
+From: Ryan Ling <ryan@outlook.com.au>
+Date: Tue, 1 Jan 2019 15:34:32 +1100
+Subject: [PATCH] Fix plugin test
+
+---
+ plugins/secrets/vault/kubernetes_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/plugins/secrets/vault/kubernetes_test.go b/plugins/secrets/vault/kubernetes_test.go
+index 42cfe6370..06d25cb63 100644
+--- a/plugins/secrets/vault/kubernetes_test.go
++++ b/plugins/secrets/vault/kubernetes_test.go
+@@ -64,6 +64,6 @@ func TestGetKubernetesToken(t *testing.T) {
+ 		t.Errorf("Expected returned token to have value '%s', got: '%s'", fakeClientToken, token)
+ 	}
+ 	if ttl != fakeLeaseDuration {
+-		t.Errorf("Expected TTL to have value '%s', got: '%s'", fakeLeaseDuration.Seconds(), ttl.Seconds())
++		t.Errorf("Expected TTL to have value '%f', got: '%f'", fakeLeaseDuration.Seconds(), ttl.Seconds())
+ 	}
+ }
