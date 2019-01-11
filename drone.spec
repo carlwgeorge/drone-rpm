@@ -10,58 +10,53 @@
 %define gobuild(o:) go build -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n')" -a -v -x %{?**};
 %endif
 
-Name: drone
-Version: 0.8.9
-Release: 1%{?dist}
-Summary: A continuous delivery system built on container technology
-License: ASL 2.0
-URL: https://drone.io
-ExclusiveArch: x86_64 %{arm} aarch64
-BuildRequires: %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-BuildRequires: golang(github.com/golang/protobuf/proto)
-BuildRequires: systemd
+
+Name:           drone
+Version:        0.8.10
+Release:        1%{?dist}
+Summary:        A continuous delivery system built on container technology
+License:        ASL 2.0
+URL:            https://drone.io
+ExclusiveArch:  x86_64 %{arm} aarch64
+
+BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
+BuildRequires:  systemd
 %{?systemd_requires}
+
+BuildRequires:  golang(github.com/golang/protobuf/proto)
+BuildRequires:  golang(golang.org/x/net/context)
+BuildRequires:  golang(golang.org/x/net/context/ctxhttp)
 
 # drone
 %global import_path github.com/drone/drone
-Source0: https://%{import_path}/archive/v%{version}/drone-%{version}.tar.gz
+Source0:        https://%{import_path}/archive/v%{version}/drone-%{version}.tar.gz
 
 # drone-ui
 %global import_path_ui github.com/drone/drone-ui
 %global commit_ui e7597b5234814a2c2f2a7f489b631a76649c335a
-Source1: https://%{import_path_ui}/archive/%{commit_ui}/drone-ui-%{commit_ui}.tar.gz
+Source1:        https://%{import_path_ui}/archive/%{commit_ui}/drone-ui-%{commit_ui}.tar.gz
 
-%if %{undefined rhel}
-BuildRequires: golang(golang.org/x/net/context)
-BuildRequires: golang(golang.org/x/net/context/ctxhttp)
-%endif
-# Fedora has golang.org/x/net packaged, but RHEL does not.  Bundle it here
-# until RHEL gets it.  Always include Source2 so it's in the SRPM.
-%global import_path_net golang.org/x/net
-%global commit_net db08ff08e8622530d9ed3a0e8ac279f6d4c02196
-Source2: https://github.com/golang/net/archive/%{commit_net}/net-%{commit_net}.tar.gz
+Source10:       drone-server.service
+Source11:       drone-agent.service
 
-Source10: drone-server.service
-Source11: drone-agent.service
+Source20:       drone-server.service.d.github
+Source21:       drone-server.service.d.gitlab
+Source22:       drone-server.service.d.gitea
+Source23:       drone-server.service.d.gogs
+Source24:       drone-server.service.d.bitbucket
+Source25:       drone-server.service.d.stash
+Source26:       drone-server.service.d.coding
 
-Source20: drone-server.service.d.github
-Source21: drone-server.service.d.gitlab
-Source22: drone-server.service.d.gitea
-Source23: drone-server.service.d.gogs
-Source24: drone-server.service.d.bitbucket
-Source25: drone-server.service.d.stash
-Source26: drone-server.service.d.coding
+Source30:       server.conf
+Source31:       agent.conf
 
-Source30: server.conf
-Source31: agent.conf
-
-Source40: github.conf
-Source41: gitlab.conf
-Source42: gitea.conf
-Source43: gogs.conf
-Source44: bitbucket.conf
-Source45: stash.conf
-Source46: coding.conf
+Source40:       github.conf
+Source41:       gitlab.conf
+Source42:       gitea.conf
+Source43:       gogs.conf
+Source44:       bitbucket.conf
+Source45:       stash.conf
+Source46:       coding.conf
 
 
 %description
@@ -72,7 +67,7 @@ and execute pipelines inside Docker containers.
 
 %ifarch x86_64
 %package server
-Summary: A continuous delivery system built on container technology
+Summary:        A continuous delivery system built on container technology
 
 
 %description server
@@ -82,10 +77,10 @@ and execute pipelines inside Docker containers.
 
 
 %package github
-Summary: Drone GitHub integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
+Summary:        Drone GitHub integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
 
 
 %description github
@@ -93,10 +88,10 @@ Conflicts: %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-s
 
 
 %package gitlab
-Summary: Drone GitLab integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
+Summary:        Drone GitLab integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
 
 
 %description gitlab
@@ -104,10 +99,10 @@ Conflicts: %{name}-github %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-s
 
 
 %package gitea
-Summary: Drone Gitea integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitlab %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
+Summary:        Drone Gitea integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitlab %{name}-gogs %{name}-bitbucket %{name}-stash %{name}-coding
 
 
 %description gitea
@@ -115,10 +110,10 @@ Conflicts: %{name}-github %{name}-gitlab %{name}-gogs %{name}-bitbucket %{name}-
 
 
 %package gogs
-Summary: Drone Gogs integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-bitbucket %{name}-stash %{name}-coding
+Summary:        Drone Gogs integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitlab %{name}-gitea %{name}-bitbucket %{name}-stash %{name}-coding
 
 
 %description gogs
@@ -126,10 +121,10 @@ Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-bitbucket %{name}
 
 
 %package bitbucket
-Summary: Drone Bitbucket Cloud integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-stash %{name}-coding
+Summary:        Drone Bitbucket Cloud integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-stash %{name}-coding
 
 
 %description bitbucket
@@ -137,10 +132,10 @@ Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-stas
 
 
 %package stash
-Summary: Drone Bitbucket Server integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-coding
+Summary:        Drone Bitbucket Server integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-coding
 
 
 %description stash
@@ -148,10 +143,10 @@ Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitb
 
 
 %package coding
-Summary: Drone Coding integration
-BuildArch: noarch
-Requires: %{name}-server
-Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash
+Summary:        Drone Coding integration
+BuildArch:      noarch
+Requires:       %{name}-server
+Conflicts:      %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitbucket %{name}-stash
 
 
 %description coding
@@ -160,7 +155,7 @@ Conflicts: %{name}-github %{name}-gitlab %{name}-gitea %{name}-gogs %{name}-bitb
 
 
 %package agent
-Summary: Drone agent
+Summary:        Drone agent
 
 
 %description agent
@@ -173,10 +168,6 @@ mkdir -p src/%(dirname %{import_path})
 ln -s ../../.. src/%{import_path}
 mkdir -p vendor/%{import_path_ui}
 tar -C vendor/%{import_path_ui} --strip-components 1 -x -f %{S:1}
-%if %{defined rhel}
-mkdir -p vendor/%{import_path_net}
-tar -C vendor/%{import_path_net} --strip-components 1 -x -f %{S:2}
-%endif
 
 
 %build
@@ -312,6 +303,10 @@ install -d -m 0750 %{buildroot}%{_sharedstatedir}/drone
 
 
 %changelog
+* Fri Jan 11 2019 Carl George <carl@george.computer> - 0.8.10-1
+- Latest upstream
+- Remove bundled golang.org/x/net
+
 * Wed Nov 28 2018 Carl George <carl@george.computer> - 0.8.9-1
 - Latest upstream
 
